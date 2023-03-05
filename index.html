@@ -1,0 +1,192 @@
+<!Doctype html>
+<html lang="hu-HU">
+<head>
+<title>Kő-papír-olló játék</title>
+<style>
+  body{
+    background-image:linear-gradient(to right, white, silver);
+  }
+.center {
+   position:absolute;
+   top:50%;
+   left:50%;
+   -ms-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+}
+#ko:hover,#papir:hover,#ollo:hover{
+  width: 280px;
+  transition: 0.5s;
+  }
+#iconok{
+   min-width:300px;
+   min-height:300px;
+ }
+ table, tr, th{
+   border: 0px solid black;
+   border-collapse: collapse;
+   border-color: #96D4D4;
+   font-size: 110%;
+   }
+h1, h2{
+   position: relative;
+   left: 2%;
+  }
+.cim{
+  position: absolute;
+  top:5%;
+  left:50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-family:Verdana;
+  }
+.eredmeny{
+  position: absolute;
+  top:80%;
+  left:50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  }
+#gomb{
+  position: absolute;
+  top:10%;
+  left:90%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  }
+</style>
+<script Language="Javascript">
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+var win = 0;
+var lose= 0;
+var draw= 0;
+function reset(){
+  clear();
+  win=0;
+  lose=0;
+  draw=0;
+  document.getElementById("scoreForCmp").innerHTML = 0;
+  document.getElementById("drawScore").innerHTML = 0;
+  document.getElementById("scoreForYou").innerHTML = 0;
+  }
+function clear(){
+  document.getElementById("result").innerHTML = "";
+  document.getElementById("tied").innerHTML = "";
+  document.getElementById("gepe").innerHTML = "";
+  document.getElementById("VS").innerHTML = "";
+}
+async function meccs(tied){
+  let gepe = valaszt();
+  clear();
+  if(tied == gepe) {
+    switch(tied){
+      case "ko" : {
+        document.getElementById("tied").innerHTML = "<img src='./Stone.png' alt='kő' width='100px'>";await sleep(250);
+        document.getElementById("VS").innerHTML = "<img src='./SF_VS.png' alt='VS' width='100px'>";await sleep(250);
+        document.getElementById("gepe").innerHTML = "<img src='./Stone.png' alt='kő' width='100px'>";
+        break;}
+      case "papir" : {
+        document.getElementById("tied").innerHTML = "<img src='./paper.png' alt='papir' width='100px'>";await sleep(250);
+        document.getElementById("VS").innerHTML = "<img src='./SF_VS.png' alt='VS' width='100px'>";await sleep(250);
+        document.getElementById("gepe").innerHTML = "<img src='./paper.png' alt='papir' width='100px'>";
+        break;}
+      case "ollo" : {
+        document.getElementById("tied").innerHTML = "<img src='./scissors.png' alt='olló' width='100px'>";await sleep(250);
+        document.getElementById("VS").innerHTML = "<img src='./SF_VS.png' alt='VS' width='100px'>";await sleep(250);
+        document.getElementById("gepe").innerHTML = "<img src='./scissors.png' alt='olló' width='100px'>";
+        break;}
+      }
+      await sleep(250);
+      document.getElementById("result").innerHTML = "Döntetlen!";
+      draw+=1; document.getElementById("drawScore").innerHTML = draw;
+    }
+  else if(tied == "ko"){
+    document.getElementById("tied").innerHTML = "<img src='./Stone.png' alt='kő' width='100px'>"; await sleep(250);
+    document.getElementById("VS").innerHTML = "<img src='./SF_VS.png' alt='VS' width='100px'>";await sleep(250);
+    if(gepe == "papir"){
+      document.getElementById("gepe").innerHTML = "<img src='./paper.png' alt='papir' width='100px'>"; await sleep(250);
+      document.getElementById("result").innerHTML = "Kikaptál!";
+      lose+=1; document.getElementById("scoreForCmp").innerHTML = lose;
+      }
+    else {
+      document.getElementById("gepe").innerHTML = "<img src='./scissors.png' alt='olló' width='100px'>"; await sleep(250);
+      document.getElementById("result").innerHTML = "Győzelem!";
+      win+=1; document.getElementById("scoreForYou").innerHTML = win;
+      }
+   }
+  else if(tied == "papir"){
+    document.getElementById("tied").innerHTML = "<img src='./paper.png' alt='papir' width='100px'>"; await sleep(250);
+    document.getElementById("VS").innerHTML = "<img src='./SF_VS.png' alt='VS' width='100px'>";await sleep(250);
+    if(gepe == "ko"){
+      document.getElementById("gepe").innerHTML = "<img src='./Stone.png' alt='kő' width='100px'>"; await sleep(250);
+      document.getElementById("result").innerHTML = "Győzelem!";
+      win+=1; document.getElementById("scoreForYou").innerHTML = win;
+      }
+    else{
+      document.getElementById("gepe").innerHTML = "<img src='./scissors.png' alt='olló' width='100px'>"; await sleep(250);
+      document.getElementById("result").innerHTML = "Kikaptál!";
+      lose+=1; document.getElementById("scoreForCmp").innerHTML = lose;
+      }
+    }
+  else if(tied == "ollo"){
+    document.getElementById("tied").innerHTML = "<img src='./scissors.png' alt='olló' width='100px'>"; await sleep(250);
+    document.getElementById("VS").innerHTML = "<img src='./SF_VS.png' alt='VS' width='100px'>";await sleep(250);
+    if(gepe == "papir"){
+      document.getElementById("gepe").innerHTML = "<img src='./paper.png' alt='papir' width='100px'>"; await sleep(250);
+      document.getElementById("result").innerHTML = "Győzelem!";
+      win+=1; document.getElementById("scoreForYou").innerHTML = win;
+      }
+    else{
+      document.getElementById("gepe").innerHTML = "<img src='./Stone.png' alt='kő' width='100px'>"; await sleep(250);
+      document.getElementById("result").innerHTML = "Kikaptál!";
+      lose+=1; document.getElementById("scoreForCmp").innerHTML = lose;
+      }
+   }
+}
+function valaszt(){
+  var rnd = Math.random();
+  if(rnd<=1/3) return "ko";
+  else if(rnd>2/3) return "ollo";
+  return "papir";
+  /*var rnd = Math.random();
+  if(rnd<=(1/3)) alert("ko");
+  else if(rnd>(2/3)) alert("ollo");
+  else alert("papir");*/
+}
+</script>
+</head>
+
+<body>
+<button id="gomb" onclick="reset()" style="font-size:150%">Pontok nullázása</button>
+<h2>Pontok</h2>
+<table><tr>
+    <th style="width:110px; text-align:right"><p>Neked: </p></th>
+    <th style="width:30px"><p id="scoreForYou">0</p></th>
+  </tr><tr>
+    <th style="text-align:right"><p>Gépnek: </p></th>
+    <th><p id="scoreForCmp">0</p></th>
+  </tr><tr>
+    <th style="text-align:right"><p>Döntetlen: </p></th>
+    <th><p id="drawScore">0</p></th>
+  </tr>
+</table>
+  
+<table class="center" id="iconok">
+<tr id="iconok" style="height:300px"> <!-- style="height=500px"-->
+<th id="iconok"> <img src="./Stone.png" id="ko" alt="kő" width=250 onclick="meccs('ko')"> </th>
+<th id="iconok"> <img src="./paper.png" id="papir" alt="papir" width=250 onclick="meccs('papir')"> </th>
+<th id="iconok"> <img src="./scissors.png" id="ollo" alt="olló" width=250 onclick="meccs('ollo')"> </th>
+</tr>
+<tr style="height:150px">
+<th id="iconok"> <p id="tied" style="text-align:right"> </p> </th>
+<th id="iconok"> <p id="VS"> </p> <!-- <img src="./SF_VS.png" alt="VS" width=200> --> </th>
+<th id="iconok"> <p id="gepe" style="text-align:left"> </p> </th>
+<tr>
+</table>
+  
+  <p class="cim" style="font-size:220%;text-align:center"><b>KŐ-PAPÍR-OLLÓ</b></p>
+  <p class="eredmeny" id="result" style="font-size:200%;text-align:center"></p>
+  
+</body>
+</html>
